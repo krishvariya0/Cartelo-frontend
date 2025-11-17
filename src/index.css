@@ -1,1 +1,17 @@
 @import "tailwindcss";
+
+:root {
+  --primary-color: #1E88E5;
+  --secondary-color: #F9A825;
+  --background-color: #F5F7FA;
+  --font-family: "Poppins", sans-serif;
+}
+
+button {
+  border-radius: 0.5rem;
+  font-weight: bold;
+}
+
+button:hover {
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+}
