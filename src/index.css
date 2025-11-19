@@ -15,3 +15,31 @@ button {
 button:hover {
   box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
 }
+
+input:focus{
+  outline: none;
+}
+
+button{
+  all: unset;
+}
+button:focus{
+  outline: none;
+}
+button:hover{
+  all: unset;
+  cursor: pointer;
+}
+
+@keyframes bounceSmooth {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-3px); /* small bounce */
+  }
+}
+
+.animate-bounceSmooth {
+  animation: bounceSmooth 1.4s ease-in-out infinite;
+}
