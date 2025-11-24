@@ -2,7 +2,7 @@ import { useForm } from 'react-hook-form';
 import { Link, useNavigate } from "react-router";
 import { ToastContainer, toast } from "react-toastify";
 
-function SignUp() {
+function SellerSignUp() {
     const navigate = useNavigate();
     const {
         register,
@@ -15,7 +15,7 @@ function SignUp() {
     const onSubmit = (data) => {
         console.log("data", data);
 
-        const userData = localStorage.getItem("carteloUser");
+        const userData = localStorage.getItem(" SellerCarteloUser");
 
         console.log("userData", userData, typeof userData);
         if (userData) {
@@ -30,11 +30,11 @@ function SignUp() {
             }
             const newUserData = [...oldUserData, data];
             console.log("newUserData", newUserData)
-            localStorage.setItem("carteloUser", JSON.stringify(newUserData));
+            localStorage.setItem(" SellerCarteloUser", JSON.stringify(newUserData));
         } else {
             const newUserData = [data];
             console.log("newUserData", newUserData);
-            localStorage.setItem("carteloUser", JSON.stringify(newUserData));
+            localStorage.setItem(" SellerCarteloUser", JSON.stringify(newUserData));
         }
 
         toast.success("Account created successfully!");
@@ -46,7 +46,7 @@ function SignUp() {
             {/* LOGO */}
             <div className="flex items-center justify-center mb-6">
                 <Link to="/" className="text-5xl font-bold text-gray-700 tracking-wide">
-                    Cartelo
+                    Cartelo Seller
                 </Link>
             </div>
 
@@ -95,46 +95,27 @@ function SignUp() {
                         />
                         {errors.email && <p className="error-message" >{errors.email.message}</p>}
                     </div>
-
-                    {/* PASSWORD */}
+                    {/* GST NUMBER */}
                     <div>
-                        <label className="text-gray-700 font-medium">Password</label>
+                        <label className="text-gray-700 font-medium">GST</label>
                         <input
                             {
-                            ...register("password",
+                            ...register("GST",
                                 {
-                                    required: { value: true, message: "Password is required" },
-                                    minLength: { value: 8, message: "Password must be at least 6 characters long" },
-                                    maxLength: { value: 20, message: "Password must be at most 20 characters long" }
+                                    required: { value: true, message: "GST Number is required" },
+                                    maxLength: { value: 24, message: "Invalid GST number" },
+                                    minLength: { value: 24, message: "Invalid GST number" }
                                 })
                             }
-                            type="password"
-                            placeholder="Enter your password"
+                            type="text"
+                            placeholder="Enter your GST Number"
                             className="w-full mt-1 border border-gray-300 rounded-md px-4 py-2 
                          focus:ring-2 focus:ring-blue-500 focus:outline-none"
                         />
-                        {errors.password && <p className="error-message" >{errors.password.message}</p>}
+                        {errors.GST && <p className="error-message" >{errors.GST.message}</p>}
                     </div>
 
-                    {/* CONFIRM PASSWORD */}
-                    <div>
-                        <label className="text-gray-700 font-medium">Confirm Password</label>
-                        <input
-                            {
-                            ...register("confirmPassword",
-                                {
-                                    required: { value: true, message: "Password is required" },
-                                    validate: (value) => value === passwordValue || "Passwords do not match"
 
-                                })
-                            }
-                            type="password"
-                            placeholder="Re-enter your password"
-                            className="w-full mt-1 border border-gray-300 rounded-md px-4 py-2 
-                         focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                        />
-                        {errors.confirmPassword && <p className="error-message" >{errors.confirmPassword.message}</p>}
-                    </div>
 
                     {/* TERMS */}
                     <div className="flex items-start gap-2 text-sm">
@@ -142,8 +123,8 @@ function SignUp() {
                             {...register("terms", { required: { value: true, message: "You must agree to the terms and conditions" } })} />
                         <p className="text-gray-600">
                             By continuing, you agree to Cartelo's{" "}
-                            <span className="text-blue-600 cursor-pointer"><Link to="/termsofuse">Terms of Use</Link></span> and{" "}
-                            <span className="text-blue-600 cursor-pointer"> <Link to="/privacypolicy">  Privacy Policy </Link> </span>.
+                            <span className="text-blue-600 cursor-pointer"><Link to="/SellerTerms">Terms of Use</Link></span> and{" "}
+                            <span className="text-blue-600 cursor-pointer"> <Link to="/SellerPrivacy">  Privacy Policy </Link> </span>.
 
                             {errors.terms && <p className="error-message" >{errors.terms.message}</p>}
                         </p>
@@ -154,7 +135,7 @@ function SignUp() {
                         className=" bg-gray-700 text-white py-3 rounded-md text-sm font-semibold 
                        hover:bg-gray-500 transition inline-block w-full text-center"
                     >
-                        Sign Up
+                        Create Your Seller Account
                     </button>
                 </form>
 
@@ -162,7 +143,7 @@ function SignUp() {
                 <p className="text-center mt-6 text-gray-700">
                     Already have an account?{" "}
                     <Link to="/login" className="text-blue-600 hover:underline">
-                        Sign In
+                        Sign In To Seller Account
                     </Link>
                 </p>
 
@@ -173,5 +154,5 @@ function SignUp() {
     );
 }
 
-export default SignUp;
+export default SellerSignUp;
 
