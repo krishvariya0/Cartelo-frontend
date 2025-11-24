@@ -19,10 +19,11 @@ import History from "./components/pages/History";
 import TodayDeal from "./components/pages/TodayDeal";
 import TopPics from "./components/pages/TopPics";
 import ProfilePage from "./components/profile/profile";
-import SellerAuth from "./components/Sellers/SellerAuth";
-import SellerPrivacy from "./components/Sellers/SellerPrivacy";
-import SellerSignUp from "./components/Sellers/SellerSignUp";
-import SellerTerms from "./components/Sellers/SellerTearms";
+import SellerAuth from "./components/SellersAuth/SellerAuth";
+import SellerPrivacy from "./components/SellersAuth/SellerPrivacy";
+import SellerSignUp from "./components/SellersAuth/SellerSignUp";
+import SellerTerms from "./components/SellersAuth/SellerTearms";
+
 
 const router = createBrowserRouter([
   {
