@@ -18,11 +18,14 @@ import GiftCards from "./components/pages/GiftCards";
 import History from "./components/pages/History";
 import TodayDeal from "./components/pages/TodayDeal";
 import TopPics from "./components/pages/TopPics";
+import EditProfile from "./components/profile/EditProfile";
 import ProfilePage from "./components/profile/profile";
 import SellerAuth from "./components/SellersAuth/SellerAuth";
+import SellerLogin from "./components/SellersAuth/SellerLogin";
 import SellerPrivacy from "./components/SellersAuth/SellerPrivacy";
 import SellerSignUp from "./components/SellersAuth/SellerSignUp";
 import SellerTerms from "./components/SellersAuth/SellerTearms";
+import SellerDashbord from "./components/sellersection/SellerDashbord";
 
 
 const router = createBrowserRouter([
@@ -90,6 +93,14 @@ const router = createBrowserRouter([
         path: "ProfilePage",
         element: <ProfilePage />,
       },
+      {
+        path: "SellerDashbord",
+        element: <SellerDashbord />,
+      },
+      {
+        path: "EditProfile",
+        element: <EditProfile />,
+      },
     ],
   },
   {
@@ -123,6 +134,10 @@ const router = createBrowserRouter([
   {
     path: "/SellerTerms",
     element: <SellerTerms />
+  },
+  {
+    path: "/SellerLogin",
+    element: <SellerLogin />
   },
 ]);
 

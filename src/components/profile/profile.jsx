@@ -85,11 +85,13 @@ function ProfilePage() {
                     desc="View & manage saved items"
                 />
 
-                <ProfileCard
-                    icon={<FiUser className="text-4xl text-indigo-600" />}
-                    title="Your Profile"
-                    desc="Edit personal information"
-                />
+                <Link to="/EditProfile">
+                    <ProfileCard
+                        icon={<FiUser className="text-4xl text-indigo-600" />}
+                        title="Your Profile"
+                        desc="Edit personal information"
+                    />
+                </Link>
                 <Link to="/SellerAuth">
                     <ProfileCard
                         icon={<MdSupervisorAccount className="text-4xl text-indigo-600" />}

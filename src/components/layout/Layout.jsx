@@ -6,7 +6,7 @@ import SecondaryNavbar from "./SecondaryNavbar";
 
 const Layout = () => {
   return (
-    <div>
+    <div className="min-h-screen flex flex-col bg-gray-50">
       <ToastContainer
         position="top-right"
         autoClose={5000}
@@ -19,7 +19,7 @@ const Layout = () => {
       />
       <Navbar />
       <SecondaryNavbar />
-      <main>
+      <main className="flex-1 w-full max-w-7xl mx-auto px-2 sm:px-4 md:px-8 py-4">
         <Outlet />
       </main>
 
