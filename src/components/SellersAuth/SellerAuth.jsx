@@ -23,7 +23,7 @@ function SellerAuth() {
                 <p className="text-center text-gray-700 mb-4">Already have a seller account?</p>
 
                 <Link
-                    to="/seller-login"
+                    to="/SellerLogin"
                     className="block w-full bg-gray-700 text-white text-center py-3 rounded-md text-sm font-semibold hover:bg-gray-600 transition"
                 >
                     Continue to Seller Login
