@@ -9,7 +9,7 @@ const Layout = () => {
     <div className="min-h-screen flex flex-col bg-gray-50">
       <ToastContainer
         position="top-right"
-        autoClose={5000}
+        autoClose={2000}
         closeButton={false}
         hideProgressBar={false}
         newestOnTop={true}

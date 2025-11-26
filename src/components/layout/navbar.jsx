@@ -1,3 +1,4 @@
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { useEffect, useState } from "react";
 import { CgProfile } from "react-icons/cg";
 import { CiSearch } from "react-icons/ci";
@@ -5,21 +6,25 @@ import { MdOutlineShoppingCart } from "react-icons/md";
 import { Link } from "react-router";
 
 const Navbar = () => {
-  const [loggedUser, setLoggedUser] = useState(null);
+  const [user, setUser] = useState(null);
 
   useEffect(() => {
-    const user = localStorage.getItem("loggedUser");
-    if (user) setLoggedUser(JSON.parse(user));
+    const auth = getAuth();
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      setUser(currentUser);
+    });
+    return () => unsubscribe();
   }, []);
 
-  // Generate initials
-  const getInitials = (name) => {
-    if (!name) return "";
+  // Generate initials from displayName or email
+  const getInitials = (user) => {
+    if (!user) return "";
+    const name = user.displayName || user.email || "";
     const parts = name.trim().split(" ");
     if (parts.length === 1) {
       return parts[0][0].toUpperCase();
     }
-    return (parts[0][0] + parts[1][0]).toUpperCase();
+    return parts.map((p) => p[0].toUpperCase()).join("").slice(0, 2);
   };
 
   return (
@@ -55,12 +60,13 @@ const Navbar = () => {
           <div className="flex items-center gap-6">
 
             {/* Profile Button */}
-            {loggedUser ? (
+            {user ? (
               <Link
                 to="/ProfilePage"
                 className="w-10 h-10 bg-gray-700 text-white flex items-center justify-center rounded-full text-lg font-bold hover:bg-gray-900 transition"
+                title={user.displayName || user.email}
               >
-                {getInitials(loggedUser.name)}
+                {getInitials(user)}
               </Link>
             ) : (
               <Link to="/authModel" className="text-gray-700 hover:text-blue-600 transition">

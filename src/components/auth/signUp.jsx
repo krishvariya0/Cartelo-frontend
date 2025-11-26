@@ -1,8 +1,13 @@
 import { useForm } from 'react-hook-form';
+import { FcGoogle } from "react-icons/fc";
+
 import { Link, useNavigate } from "react-router";
 import { ToastContainer, toast } from "react-toastify";
+import { signUpWithEmailAndPassword } from '../../utils/auth';
 
 function SignUp() {
+
+
     const navigate = useNavigate();
     const {
         register,
@@ -15,30 +20,24 @@ function SignUp() {
     const onSubmit = (data) => {
         console.log("data", data);
 
-        const userData = localStorage.getItem("carteloUser");
+        signUpWithEmailAndPassword(data.email, data.password).then((response) => {
+            console.log("response", response);
 
-        console.log("userData", userData, typeof userData);
-        if (userData) {
-            const oldUserData = JSON.parse(userData);
-            console.log("oldUserData", oldUserData);
-            const findEmail = oldUserData.find(user => user.email?.toLowerCase() === data.email?.toLowerCase());
-            console.log("findEmail>>>", findEmail);
-            if (findEmail) {
-                console.log("findEmail", findEmail);
-                toast.error("This email already exists!");
-                return;
+            toast.success("Account created successfully!");
+            
+
+        }).catch((error) => {
+            if (error.code === "auth/email-already-in-use") {
+                toast.error("User already exists!");
             }
-            const newUserData = [...oldUserData, data];
-            console.log("newUserData", newUserData)
-            localStorage.setItem("carteloUser", JSON.stringify(newUserData));
-        } else {
-            const newUserData = [data];
-            console.log("newUserData", newUserData);
-            localStorage.setItem("carteloUser", JSON.stringify(newUserData));
-        }
+        }).finally(() => {});
 
-        toast.success("Account created successfully!");
-        navigate("/login");
+
+
+        
+
+
+
     };
     return (
         <div className="w-full flex flex-col items-center mt-14 mb-24 px-4">
@@ -58,7 +57,7 @@ function SignUp() {
 
                     {/* NAME */}
                     <div>
-                        <label className="text-gray-700 font-medium">Name</label>
+                        <label for='name' className="text-gray-700 font-medium">Name</label>
                         <input
                             {
                             ...register("name",
@@ -70,6 +69,7 @@ function SignUp() {
                                 })
                             }
                             type="text"
+                            id='name'
                             placeholder="Enter your name"
                             className="w-full mt-1 border border-gray-300 rounded-md px-4 py-2 
                          focus:ring-2 focus:ring-blue-500 focus:outline-none"
@@ -79,7 +79,7 @@ function SignUp() {
 
                     {/* EMAIL OR NUMBER */}
                     <div>
-                        <label className="text-gray-700 font-medium">Email</label>
+                        <label for='email' className="text-gray-700 font-medium">Email</label>
                         <input
                             {
                             ...register("email",
@@ -89,6 +89,7 @@ function SignUp() {
                                 })
                             }
                             type="text"
+                            id='email'
                             placeholder="Enter your email"
                             className="w-full mt-1 border border-gray-300 rounded-md px-4 py-2 
                          focus:ring-2 focus:ring-blue-500 focus:outline-none"
@@ -98,7 +99,7 @@ function SignUp() {
 
                     {/* PASSWORD */}
                     <div>
-                        <label className="text-gray-700 font-medium">Password</label>
+                        <label for='password' className="text-gray-700 font-medium">Password</label>
                         <input
                             {
                             ...register("password",
@@ -109,6 +110,7 @@ function SignUp() {
                                 })
                             }
                             type="password"
+                            id='password'
                             placeholder="Enter your password"
                             className="w-full mt-1 border border-gray-300 rounded-md px-4 py-2 
                          focus:ring-2 focus:ring-blue-500 focus:outline-none"
@@ -118,7 +120,7 @@ function SignUp() {
 
                     {/* CONFIRM PASSWORD */}
                     <div>
-                        <label className="text-gray-700 font-medium">Confirm Password</label>
+                        <label for='confirmPassword' className="text-gray-700 font-medium">Confirm Password</label>
                         <input
                             {
                             ...register("confirmPassword",
@@ -129,6 +131,7 @@ function SignUp() {
                                 })
                             }
                             type="password"
+                            id='confirmPassword'
                             placeholder="Re-enter your password"
                             className="w-full mt-1 border border-gray-300 rounded-md px-4 py-2 
                          focus:ring-2 focus:ring-blue-500 focus:outline-none"
@@ -159,12 +162,22 @@ function SignUp() {
                 </form>
 
                 {/* FOOTER */}
-                <p className="text-center mt-6 text-gray-700">
-                    Already have an account?{" "}
-                    <Link to="/login" className="text-blue-600 hover:underline">
-                        Sign In
-                    </Link>
-                </p>
+                <div className="flex flex-col items-center justify-center mt-6 mb-6">
+
+                    <p className="text-center text-gray-700">
+                        Already have an account?{" "}
+                        <Link to="/login" className="text-blue-600 hover:underline">
+                            Sign In
+                        </Link>
+                    </p>
+
+                    <div className="flex items-center justify-center mt-6">
+                        <button className="flex items-center gap-2 py-2 px-4 rounded-full bg-white shadow-md">
+                            <FcGoogle size={24} className="mr-2" />
+                            Continue with Google
+                        </button>
+                    </div>
+                </div>
 
             </div>
             <ToastContainer />

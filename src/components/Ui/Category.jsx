@@ -81,7 +81,7 @@ function Category() {
                     alt={category.name}
                     className="w-full h-full object-cover "
                   />
-                  
+
                   {/* Overlay Gradient */}
                   <div className="absolute inset-0 bg-black opacity-0 "></div>
 
@@ -112,7 +112,7 @@ function Category() {
                   </button>
                 </div>
 
-                
+
               </div>
             </Link>
           ))}

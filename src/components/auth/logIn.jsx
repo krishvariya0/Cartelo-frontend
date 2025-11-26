@@ -1,61 +1,39 @@
-import { useState } from "react";
+import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router";
 import { toast, ToastContainer } from "react-toastify";
+import { signInWithEmailAndPass } from "../../utils/auth";
 
 function LogIn() {
+
     const navigate = useNavigate();
 
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-    const [rememberMe, setRememberMe] = useState(false);
+    const {
+        register,
+        handleSubmit,
+        formState: { errors },
+    } = useForm();
 
-    const [errors, setErrors] = useState({}); // <-- for error messages like signup
+    // LOGIN SUBMIT HANDLER
+    const onSubmit = async ({ email, password }) => {
+        try {
+            const response = await signInWithEmailAndPass(email, password);
+            console.log("Login Response:", response);
 
-    const validateForm = () => {
-        let temp = {};
+            toast.success("Login Successful!");
 
-        if (!email) temp.email = "Email is required";
-        if (!password) temp.password = "Password is required";
+            setTimeout(() => navigate("/"), 3000);
 
-        setErrors(temp);
+        } catch (error) {
+            console.log("Login Error:", error);
 
-        return Object.keys(temp).length === 0;
-    };
-
-    const handleSubmit = (e) => {
-        e.preventDefault();
-
-        // local validation first
-        if (!validateForm()) {
-            toast.error("Please fix the errors");
-            return;
+            if (error.code === "auth/invalid-credential" || error.code === "auth/wrong-password") {
+                toast.error("Invalid email or password!");
+            } else if (error.code === "auth/user-not-found") {
+                toast.error("Account does not exist!");
+            } else {
+                toast.error("Something went wrong!");
+            }
         }
-
-        const usersJson = localStorage.getItem("carteloUser");
-        const users = usersJson ? JSON.parse(usersJson) : [];
-
-        const found = users.find(
-            (user) =>
-                user.email.toLowerCase() === email.toLowerCase() &&
-                user.password === password
-        );
-
-        if (!found) {
-            toast.error("Invalid email or password");
-            return;
-        }
-
-        // Save current user
-        localStorage.setItem(
-            "loggedUser",
-            JSON.stringify({ email: found.email, name: found.name })
-        );
-
-        toast.success("Login successful!");
-
-        setTimeout(() => {
-            navigate("/");
-        }, 1000);
     };
 
     return (
@@ -75,72 +53,71 @@ function LogIn() {
                     Sign In
                 </h1>
 
-                <form onSubmit={handleSubmit} className="space-y-5">
+                {/* FORM */}
+                <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
 
                     {/* EMAIL */}
                     <div>
-                        <label className="text-gray-700 font-medium">Email</label>
+                        <label for="email" className="text-gray-700 font-medium">Email</label>
                         <input
+                            {...register("email", {
+                                required: "Email is required",
+                                pattern: {
+                                    value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                                    message: "Invalid email format",
+                                },
+                            })}
                             type="email"
-                            value={email}
+                            id="email"
                             placeholder="Enter your email"
-                            onChange={(e) => {
-                                setEmail(e.target.value);
-                                setErrors({ ...errors, email: "" });
-                            }}
-                            className="w-full mt-1 border border-gray-300 rounded-md px-4 py-2 
-                            focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                            className="w-full mt-1 border border-gray-300 rounded-md px-4 py-2 focus:ring-2 focus:ring-blue-500"
                         />
                         {errors.email && (
-                            <p className="error-message">{errors.email}</p>
+                            <p className="error-message">{errors.email.message}</p>
                         )}
                     </div>
 
                     {/* PASSWORD */}
                     <div>
-                        <label className="text-gray-700 font-medium">Password</label>
+                        <label for="password" className="text-gray-700 font-medium">Password</label>
                         <input
+                            {...register("password", {
+                                required: "Password is required",
+                                minLength: { value: 6, message: "Minimum 6 characters required" },
+                                maxLength: { value: 20, message: "Max 20 characters allowed" }
+                            })}
                             type="password"
-                            value={password}
+                            id="password"
                             placeholder="Enter your password"
-                            onChange={(e) => {
-                                setPassword(e.target.value);
-                                setErrors({ ...errors, password: "" });
-                            }}
-                            className="w-full mt-1 border border-gray-300 rounded-md px-4 py-2 
-                            focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                            className="w-full mt-1 border border-gray-300 rounded-md px-4 py-2 focus:ring-2 focus:ring-blue-500"
                         />
                         {errors.password && (
-                            <p className="error-message">{errors.password}</p>
+                            <p className="error-message">{errors.password.message}</p>
                         )}
                     </div>
 
-                    {/* REMEMBER */}
+                    {/* REMEMBER ME + FORGOT PASSWORD */}
                     <div className="flex justify-between items-center">
                         <label className="flex items-center gap-2 text-sm text-gray-600">
-                            <input
-                                type="checkbox"
-                                checked={rememberMe}
-                                onChange={(e) => setRememberMe(e.target.checked)}
-                                className="w-4 h-4"
-                            />
+                            <input type="checkbox" className="w-4 h-4" />
                             Remember me
                         </label>
-                        <Link className="text-sm text-blue-600 hover:underline">
+
+                        <button className="text-sm text-blue-600 hover:underline">
                             Forgot Password?
-                        </Link>
+                        </button>
                     </div>
 
                     {/* LOGIN BUTTON */}
                     <button
                         type="submit"
-                        className="w-full bg-gray-700 text-white py-3 rounded-md text-sm font-semibold 
-                        hover:bg-gray-600 transition"
+                        className="w-full bg-gray-700 text-white py-3 rounded-md text-sm font-semibold hover:bg-gray-600 transition"
                     >
                         Login
                     </button>
                 </form>
 
+                {/* FOOTER */}
                 <p className="text-center mt-6 text-gray-700">
                     New to Cartelo?{" "}
                     <Link to="/signup" className="text-blue-600 hover:underline">
@@ -148,6 +125,7 @@ function LogIn() {
                     </Link>
                 </p>
             </div>
+
             <ToastContainer />
         </div>
     );

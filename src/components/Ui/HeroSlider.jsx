@@ -13,12 +13,16 @@ const HeroSlider = () => {
         const interval = setInterval(() => {
             setCurrent(prev => (prev === slides.length - 1 ? 0 : prev + 1));
         }, 4000);
-
         return () => clearInterval(interval);
     }, []);
 
     return (
-        <div className=" w-full overflow-hidden h-[350px] md:h-[500px]">
+        <div className="w-full overflow-hidden 
+                        h-[220px]    /* mobile */
+                        sm:h-[300px] 
+                        md:h-[420px] 
+                        lg:h-[520px] 
+                        xl:h-[650px]">
 
             {/* SLIDER */}
             <div
@@ -29,10 +33,15 @@ const HeroSlider = () => {
                     <img
                         src={img}
                         key={index}
-                        className="min-w-full h-[450px] md:h-[650px] object-cover"
-                        alt=""
+                        alt="hero"
+                        className="min-w-full 
+                                   h-[220px] 
+                                   sm:h-[300px]
+                                   md:h-[420px]
+                                   lg:h-[520px]
+                                   xl:h-[650px]
+                                   object-cover"
                     />
-
                 ))}
             </div>
         </div>
