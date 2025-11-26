@@ -1,12 +1,20 @@
-import tailwindcss from '@tailwindcss/vite'
-import react from '@vitejs/plugin-react-swc'
-import { defineConfig } from 'vite'
+import tailwindcss from "@tailwindcss/vite";
+import react from "@vitejs/plugin-react-swc";
+import { defineConfig, loadEnv } from "vite";
 
+export default defineConfig(({ mode }) => {
+  // Load .env variables
+  const env = loadEnv(mode, process.cwd(), "");
 
-// https://vite.dev/config/
-export default defineConfig({
-  plugins: [
-    react(),
-    tailwindcss(),
-  ],
-})
+  return {
+    plugins: [
+      react(),
+      tailwindcss(),
+    ],
+    define: {
+      // Makes process.env.* work inside Vite (frontend)
+      "process.env": env,
+    },
+  };
+});
+

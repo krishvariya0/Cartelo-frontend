@@ -16,7 +16,7 @@ const firebaseConfig = {
     appId: process.env.REACT_APP_FIREBASE_APP_ID,
     measurementId: process.env.REACT_APP_FIREBASE_APP_MEASUREMENT_ID,
     // You already have a databaseURL in your project facts for the default RTDB:
-    databaseURL: process.env.REACT_APP_FIREBASE_APP_DATABASE_URL, // <-- It's good practice to include this, though it might be inferred.
+    databaseURL: process.env.REACT_APP_FIREBASE_DATABASE_URL, // <-- It's good practice to include this, though it might be inferred.
 };
 
 // Initialize Firebase
