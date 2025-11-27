@@ -11,20 +11,19 @@ const HeroSlider = () => {
 
     useEffect(() => {
         const interval = setInterval(() => {
-            setCurrent(prev => (prev === slides.length - 1 ? 0 : prev + 1));
+            setCurrent((prev) => (prev === slides.length - 1 ? 0 : prev + 1));
         }, 4000);
         return () => clearInterval(interval);
     }, []);
 
     return (
-        <div className="w-full overflow-hidden 
-                        h-[220px]    /* mobile */
-                        sm:h-[300px] 
-                        md:h-[420px] 
-                        lg:h-[520px] 
-                        xl:h-[650px]">
-
-            {/* SLIDER */}
+        <div
+            className="
+                w-screen overflow-hidden
+                relative left-1/2 right-1/2 ml-[-50vw] mr-[-50vw]
+                h-[280px] sm:h-[230px] md:h-[300px] lg:h-[360px] xl:h-[420px]
+            "
+        >
             <div
                 className="flex transition-transform duration-700 ease-out"
                 style={{ transform: `translateX(-${current * 100}%)` }}
@@ -34,13 +33,11 @@ const HeroSlider = () => {
                         src={img}
                         key={index}
                         alt="hero"
-                        className="min-w-full 
-                                   h-[220px] 
-                                   sm:h-[300px]
-                                   md:h-[420px]
-                                   lg:h-[520px]
-                                   xl:h-[650px]
-                                   object-cover"
+                        className="
+                            w-screen min-w-full 
+                            h-[280px] sm:h-[230px] md:h-[300px] lg:h-[360px] xl:h-[420px]
+                            object-cover
+                        "
                     />
                 ))}
             </div>

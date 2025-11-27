@@ -43,17 +43,14 @@ function Category() {
     },
   ];
 
-  const badgeColors = {
-    "Trending": "bg-yellow-400",
-    "Sale": "bg-red-400",
-    "New": "bg-green-400",
-    "Popular": "bg-purple-400"
-  };
+ 
 
   return (
-    <div className="w-full py-8 md:py-12 lg:py-16 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-gray-50 to-white">
-      <div className="max-w-7xl mx-auto">
+    <div className="   py-8 md:py-12 lg:py-16 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-gray-50 to-white">
+      <div className=" ">
         {/* Section Title */}
+
+
         {/* <div className="text-center mb-8 md:mb-12">
           <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-gray-800 mb-2">
             Shop by Category
@@ -63,8 +60,9 @@ function Category() {
           </p>
         </div> */}
 
+
         {/* Categories Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 lg:gap-8">
+        <div className=" flex max-w-full flex-wrap justify-center lg:grid-cols-4 gap-4 md:gap-6 lg:gap-8">
           {categories.map((category) => (
             <Link
               key={category.id}
@@ -79,16 +77,8 @@ function Category() {
                   <img
                     src={category.image}
                     alt={category.name}
-                    className="w-full h-full object-cover "
+                    className="w-auto h-full object-contain "
                   />
-
-                  {/* Overlay Gradient */}
-                  <div className="absolute inset-0 bg-black opacity-0 "></div>
-
-                  {/* Badge */}
-                  <span className={`absolute top-3 right-3 ${badgeColors[category.badge]} text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg`}>
-                    {category.badge}
-                  </span>
                 </div>
 
                 {/* Content */}
@@ -104,15 +94,13 @@ function Category() {
                   </p>
 
                   {/* Button */}
-                  <button className={`w-full bg-gradient-to-r ${category.color} text-white font-semibold py-2 md:py-3 rounded-lg transition-all duration-300 transform group-hover:shadow-lg flex items-center justify-center gap-2 text-sm md:text-base`}>
+                  <button className={`w-full bg-gradient-to-rbg-gray-800 bg-gray-700 hover:bg-gray-900 text-white font-semibold py-2 md:py-3 rounded-lg transition-all duration-300 transform group-hover:shadow-lg flex items-center justify-center gap-2 text-sm md:text-base`}>
                     Shop Now
                     <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                    </svg>
+                    </svg> 
                   </button>
                 </div>
-
-
               </div>
             </Link>
           ))}
@@ -136,3 +124,4 @@ function Category() {
 }
 
 export default Category;
+

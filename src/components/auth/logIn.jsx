@@ -1,11 +1,12 @@
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router";
 import { toast, ToastContainer } from "react-toastify";
 import { signInWithEmailAndPass } from "../../utils/auth";
 
 function LogIn() {
-
     const navigate = useNavigate();
+    const [isDisabled, setIsDisabled] = useState(false);
 
     const {
         register,
@@ -13,15 +14,17 @@ function LogIn() {
         formState: { errors },
     } = useForm();
 
-    // LOGIN SUBMIT HANDLER
     const onSubmit = async ({ email, password }) => {
+        setIsDisabled(true);
+        setTimeout(() => setIsDisabled(true), 3000);
+
         try {
             const response = await signInWithEmailAndPass(email, password);
             console.log("Login Response:", response);
 
             toast.success("Login Successful!");
 
-            setTimeout(() => navigate("/"), 3000);
+            setTimeout(() => navigate("/"), 2000);
 
         } catch (error) {
             console.log("Login Error:", error);
@@ -58,23 +61,19 @@ function LogIn() {
 
                     {/* EMAIL */}
                     <div>
-                        <label for="email" className="text-gray-700 font-medium">Email</label>
+                        <label for='email' className="text-gray-700 font-medium">Email</label>
                         <input
                             {...register("email", {
-                                required: "Email is required",
-                                pattern: {
-                                    value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-                                    message: "Invalid email format",
-                                },
-                            })}
-                            type="email"
-                            id="email"
+                                required: { value: true, message: "Email is required" },
+                                pattern: { value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/, message: "Invalid email or number" }
+                            })
+                            }
+                            type="text"
+                            id='email'
                             placeholder="Enter your email"
-                            className="w-full mt-1 border border-gray-300 rounded-md px-4 py-2 focus:ring-2 focus:ring-blue-500"
+                            className="w-full mt-1 border border-gray-300 rounded-md px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
                         />
-                        {errors.email && (
-                            <p className="error-message">{errors.email.message}</p>
-                        )}
+                        {errors.email && <p className="error-message" >{errors.email.message}</p>}
                     </div>
 
                     {/* PASSWORD */}
@@ -85,7 +84,8 @@ function LogIn() {
                                 required: "Password is required",
                                 minLength: { value: 6, message: "Minimum 6 characters required" },
                                 maxLength: { value: 20, message: "Max 20 characters allowed" }
-                            })}
+                            })
+                            }
                             type="password"
                             id="password"
                             placeholder="Enter your password"
@@ -103,15 +103,16 @@ function LogIn() {
                             Remember me
                         </label>
 
-                        <button className="text-sm text-blue-600 hover:underline">
+                        <Link to="/ForgotPassword" className="text-sm text-blue-600 hover:underline">
                             Forgot Password?
-                        </button>
+                        </Link>
                     </div>
 
                     {/* LOGIN BUTTON */}
-                    <button
+                    <button 
                         type="submit"
                         className="w-full bg-gray-700 text-white py-3 rounded-md text-sm font-semibold hover:bg-gray-600 transition"
+                        disabled={isDisabled}
                     >
                         Login
                     </button>
@@ -132,3 +133,4 @@ function LogIn() {
 }
 
 export default LogIn;
+

@@ -1,6 +1,7 @@
 import { createBrowserRouter } from "react-router";
 import App from "./App";
 import AuthModel from "./components/auth/authModel";
+import ForgotPassword from "./components/auth/ForgotPassword";
 import LogIn from "./components/auth/logIn";
 import SignUp from "./components/auth/signUp";
 import PrivacyPolicy from "./components/Conditions/sapport";
@@ -138,6 +139,10 @@ const router = createBrowserRouter([
   {
     path: "/SellerLogin",
     element: <SellerLogin />
+  },
+  {
+    path: "/ForgotPassword",
+    element: <ForgotPassword />
   },
 ]);
 
