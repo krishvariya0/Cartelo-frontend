@@ -15,8 +15,7 @@ const firebaseConfig = {
     messagingSenderId: import.meta.env.VITE_APP_FIREBASE_MESSAGING_SENDER_ID,
     appId: import.meta.env.VITE_APP_FIREBASE_APP_ID,
     measurementId: import.meta.env.VITE_APP_FIREBASE_APP_MEASUREMENT_ID,
-    // You already have a databaseURL in your project facts for the default RTDB:
-    databaseURL: import.meta.env.VITE_APP_FIREBASE_DATABASE_URL, // <-- It's good practice to include this, though it might be inferred.
+    // databaseURL: import.meta.env.VITE_APP_FIREBASE_DATABASE_URL,
 };
 
 // Initialize Firebase

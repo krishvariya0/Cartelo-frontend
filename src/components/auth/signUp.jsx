@@ -24,6 +24,8 @@ function SignUp() {
             console.log("response", response);
 
             toast.success("Account created successfully!");
+
+            navigate("/");
             
 
         }).catch((error) => {

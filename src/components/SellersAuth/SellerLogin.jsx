@@ -1,143 +1,129 @@
-import { useState } from "react";
+import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router";
-import { toast, ToastContainer } from "react-toastify";
+import { ToastContainer, toast } from "react-toastify";
+
+import { collection, doc, getDocs, setDoc } from "firebase/firestore";
+import { db } from "../../utils/firebase";
 
 const SellerLogin = () => {
     const navigate = useNavigate();
+    const { register, handleSubmit, formState: { errors } } = useForm();
 
-    const [mobile, setMobile] = useState("");
-    const [GST, setGST] = useState("");
-    const [otp, setOtp] = useState("");
+    const onSubmit = async (data) => {
+        try {
+            const sellersRef = collection(db, "sellers");
+            const snapshot = await getDocs(sellersRef);
 
-    const [errors, setErrors] = useState({}); // <-- error messages same like user login
+            let matchedSeller = null;
 
-    // Validation just like user Login page
-    const validateForm = () => {
-        let temp = {};
+            snapshot.forEach((sellerDoc) => {
+                const seller = sellerDoc.data();
+                if (seller.mobile === data.mobile && seller.GST === data.GST) {
+                    matchedSeller = { id: sellerDoc.id, ...seller };
+                }
+            });
 
-        if (!mobile) temp.mobile = "Mobile number is required";
-        else if (mobile.length !== 10)
-            temp.mobile = "Mobile number must be 10 digits";
+            if (!matchedSeller) {
+                toast.error("Mobile or GST is incorrect");
+                return;
+            }
 
-        if (!GST) temp.GST = "GST Number is required";
-        else if (GST.length !== 15)
-            temp.GST = "GST Number must be 15 characters";
+            // CREATE FIRESTORE SESSION
+            const sessionId = `seller_${matchedSeller.id}`;
+            const sessionRef = doc(db, "activeseller", sessionId);
 
-        if (!otp) temp.otp = "OTP is required";
+            await setDoc(sessionRef, {
+                userId: matchedSeller.id,
+                userType: "seller",
+                isActive: true,
+                lastActive: Date.now(),
+                userData: {
+                    name: matchedSeller.name,
+                    mobile: matchedSeller.mobile,
+                    GST: matchedSeller.GST,
+                    email: matchedSeller.email
+                }
+            });
 
-        setErrors(temp);
+            toast.success("Login Successful!");
 
-        return Object.keys(temp).length === 0;
-    };
+            setTimeout(() => navigate("/SellerDashbord"), 1200);
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-
-        if (!validateForm()) {
-            toast.error("Please fix the errors");
-            return;
+        } catch (error) {
+            console.error(error);
+            toast.error("Login failed: " + error.message);
         }
-
-        const stored = localStorage.getItem("SellerCarteloUser");
-        const sellers = stored ? JSON.parse(stored) : [];
-
-        const found = sellers.find(
-            (seller) => seller.mobile === mobile && seller.GST === GST
-        );
-
-        if (!found) {
-            toast.error("Mobile Number or GST Number is incorrect");
-            return;
-        }
-
-        // Save logged seller
-        localStorage.setItem(
-            "loggedSeller",
-            JSON.stringify({
-                name: found.name,
-                mobile: found.mobile,
-                GST: found.GST,
-            })
-        );
-
-        toast.success("Seller Login Successful!");
-
-        setTimeout(() => {
-            navigate("/SellerDashbord");
-        }, 1000);
     };
 
     return (
         <div className="w-full flex flex-col items-center mt-14 mb-24 px-4">
-            {/* Logo */}
             <div className="flex items-center justify-center mb-6">
                 <Link to="/" className="text-5xl font-bold text-gray-700 tracking-wide">
                     Cartelo Seller
                 </Link>
             </div>
 
-            {/* Login Card */}
             <div className="w-full max-w-lg bg-white border border-gray-300 rounded-lg shadow-lg p-8">
                 <h1 className="text-2xl font-bold text-center text-gray-800 mb-6">
                     Seller Login
                 </h1>
 
-                <form onSubmit={handleSubmit} className="space-y-5">
-
-                    {/* MOBILE FIELD */}
+                <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
+                    
+                    {/* Mobile */}
                     <div>
                         <label className="text-gray-700 font-medium">Mobile Number</label>
                         <input
+                            {...register("mobile", {
+                                required: "Mobile number is required",
+                                minLength: { value: 10, message: "Mobile must be 10 digits" },
+                                maxLength: { value: 10, message: "Mobile must be 10 digits" },
+                                pattern: { value: /^[0-9]{10}$/, message: "Only digits allowed" }
+                            })}
                             type="text"
-                            placeholder="Enter your mobile number"
-                            value={mobile}
-                            onChange={(e) => {
-                                setMobile(e.target.value);
-                                setErrors({ ...errors, mobile: "" });
-                            }}
-                            className="w-full mt-1 border border-gray-300 rounded-md px-4 py-2 focus:ring-2 focus:ring-blue-500"
+                            placeholder="Enter mobile number"
+                            className="w-full mt-1 border border-gray-300 rounded-md px-4 py-2"
                         />
-                        {errors.mobile && (
-                            <p className="error-message">{errors.mobile}</p>
-                        )}
+                        {errors.mobile && <p className="error-message">{errors.mobile.message}</p>}
                     </div>
 
-                    {/* GST FIELD */}
+                    {/* GST */}
                     <div>
                         <label className="text-gray-700 font-medium">GST Number</label>
                         <input
+                            {...register("GST", {
+                                required: "GST is required",
+                                minLength: { value: 15, message: "GST must be 15 characters" },
+                                maxLength: { value: 15, message: "GST must be 15 characters" },
+                                // pattern: { value: /^[0-9A-Z]{15}$/, message: "Invalid GST format" }
+                            })}
                             type="text"
-                            placeholder="Enter your GST Number"
-                            value={GST}
-                            onChange={(e) => {
-                                setGST(e.target.value);
-                                setErrors({ ...errors, GST: "" });
-                            }}
-                            className="w-full mt-1 border border-gray-300 rounded-md px-4 py-2 focus:ring-2 focus:ring-blue-500"
+                            placeholder="Enter GST Number"
+                            className="w-full mt-1 border border-gray-300 rounded-md px-4 py-2"
                         />
-                        {errors.GST && <p className="error-message">{errors.GST}</p>}
+                        {errors.GST && <p className="error-message">{errors.GST.message}</p>}
                     </div>
 
-                    {/* OTP FIELD */}
+                    {/* OTP */}
                     <div>
                         <label className="text-gray-700 font-medium">OTP</label>
                         <input
+                            {...register("otp", {
+                                required: "OTP is required",
+                                minLength: { value: 6, message: "OTP must be 6 digits" },
+                                maxLength: { value: 6, message: "OTP must be 6 digits" },
+                                pattern: { value: /^[0-9]{6}$/, message: "OTP must be 6 numbers" }
+                            })}
                             type="text"
                             placeholder="Enter OTP"
-                            value={otp}
-                            onChange={(e) => {
-                                setOtp(e.target.value);
-                                setErrors({ ...errors, otp: "" });
-                            }}
-                            className="w-full mt-1 border border-gray-300 rounded-md px-4 py-2 focus:ring-2 focus:ring-blue-500"
+                            className="w-full mt-1 border border-gray-300 rounded-md px-4 py-2"
                         />
-                        {errors.otp && <p className="error-message">{errors.otp}</p>}
+                        {errors.otp && <p className="error-message">{errors.otp.message}</p>}
                     </div>
 
-                    {/* LOGIN BUTTON */}
                     <button
                         type="submit"
-                        className="w-full bg-gray-700 text-white py-3 rounded-md text-sm font-semibold hover:bg-gray-600 transition"
+                        className="w-full bg-gray-700 text-white py-3 rounded-md hover:bg-gray-600 transition"
                     >
                         Login to Seller Account
                     </button>
@@ -149,6 +135,7 @@ const SellerLogin = () => {
                         Create Seller Account
                     </Link>
                 </p>
+
             </div>
 
             <ToastContainer />

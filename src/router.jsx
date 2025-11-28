@@ -3,6 +3,7 @@ import App from "./App";
 import AuthModel from "./components/auth/authModel";
 import ForgotPassword from "./components/auth/ForgotPassword";
 import LogIn from "./components/auth/logIn";
+import ResetPassword from "./components/auth/ResetPassword";
 import SignUp from "./components/auth/signUp";
 import PrivacyPolicy from "./components/Conditions/sapport";
 import TermsOfUse from "./components/Conditions/Terms";
@@ -143,6 +144,10 @@ const router = createBrowserRouter([
   {
     path: "/ForgotPassword",
     element: <ForgotPassword />
+  },
+  {
+    path: "/ResetPassword",
+    element: <ResetPassword />
   },
 ]);
 
