@@ -7,6 +7,8 @@ import ResetPassword from "./components/auth/ResetPassword";
 import SignUp from "./components/auth/signUp";
 import PrivacyPolicy from "./components/Conditions/sapport";
 import TermsOfUse from "./components/Conditions/Terms";
+import ProtectedRoute from "./components/hoc/ProtectedRoute";
+import AuthBlockRoute from "./components/hoc/UnprotectedRouter";
 import Layout from "./components/layout/Layout";
 import BuyAgain from "./components/pages/BuyAgain";
 import Electronics from "./components/pages/category/Electronics";
@@ -22,12 +24,6 @@ import TodayDeal from "./components/pages/TodayDeal";
 import TopPics from "./components/pages/TopPics";
 import EditProfile from "./components/profile/EditProfile";
 import ProfilePage from "./components/profile/profile";
-import SellerAuth from "./components/SellersAuth/SellerAuth";
-import SellerLogin from "./components/SellersAuth/SellerLogin";
-import SellerPrivacy from "./components/SellersAuth/SellerPrivacy";
-import SellerSignUp from "./components/SellersAuth/SellerSignUp";
-import SellerTerms from "./components/SellersAuth/SellerTearms";
-import SellerDashbord from "./components/sellersection/SellerDashbord";
 
 
 const router = createBrowserRouter([
@@ -89,16 +85,13 @@ const router = createBrowserRouter([
       },
       {
         path: "authModel",
-        element: <AuthModel />,
+        element: <AuthBlockRoute> <AuthModel /> </AuthBlockRoute>
       },
       {
         path: "ProfilePage",
-        element: <ProfilePage />,
+        element: <ProtectedRoute><ProfilePage /></ProtectedRoute>,
       },
-      {
-        path: "SellerDashbord",
-        element: <SellerDashbord />,
-      },
+
       {
         path: "EditProfile",
         element: <EditProfile />,
@@ -107,39 +100,19 @@ const router = createBrowserRouter([
   },
   {
     path: "/login",
-    element: <LogIn />
+    element: <AuthBlockRoute>  <LogIn /> </AuthBlockRoute>
   },
   {
     path: "/signup",
-    element: <SignUp />
+    element: <AuthBlockRoute>  <SignUp /> </AuthBlockRoute>
   },
   {
     path: "/termsofuse",
-    element: <TermsOfUse />
+    element: <AuthBlockRoute> <TermsOfUse /></AuthBlockRoute>
   },
   {
     path: "/privacypolicy",
-    element: <PrivacyPolicy />
-  },
-  {
-    path: "/SellerAuth",
-    element: <SellerAuth />
-  },
-  {
-    path: "/SellerSignUp",
-    element: <SellerSignUp />
-  },
-  {
-    path: "/SellerPrivacy",
-    element: <SellerPrivacy />
-  },
-  {
-    path: "/SellerTerms",
-    element: <SellerTerms />
-  },
-  {
-    path: "/SellerLogin",
-    element: <SellerLogin />
+    element: <AuthBlockRoute> <PrivacyPolicy /> </AuthBlockRoute>
   },
   {
     path: "/ForgotPassword",

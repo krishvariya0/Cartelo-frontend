@@ -1,9 +1,9 @@
 import { useForm } from 'react-hook-form';
-import { FcGoogle } from "react-icons/fc";
 
+import { FcGoogle } from 'react-icons/fc';
 import { Link, useNavigate } from "react-router";
 import { ToastContainer, toast } from "react-toastify";
-import { signUpWithEmailAndPassword } from '../../utils/auth';
+import { signUpWithEmailAndPassword, signUpWithGoogle } from '../../utils/auth';
 
 function SignUp() {
 
@@ -17,6 +17,26 @@ function SignUp() {
     } = useForm();
     const passwordValue = watch("password");
 
+    // ===========
+    // google sign in
+    // ===========
+
+    const handleGoogle = async () => {
+        try {
+            const res = await signUpWithGoogle();
+
+            toast.success("Logged in with Google!");
+            setTimeout(() => navigate("/"), 1500);
+
+        } catch (error) {
+            toast.error("Google login failed!");
+        }
+    };
+
+
+
+
+
     const onSubmit = (data) => {
         console.log("data", data);
 
@@ -26,17 +46,18 @@ function SignUp() {
             toast.success("Account created successfully!");
 
             navigate("/");
-            
+
 
         }).catch((error) => {
             if (error.code === "auth/email-already-in-use") {
                 toast.error("User already exists!");
             }
-        }).finally(() => {});
+        }).finally(() => { });
 
 
 
-        
+
+
 
 
 
@@ -161,7 +182,20 @@ function SignUp() {
                     >
                         Sign Up
                     </button>
+
+
                 </form>
+
+                <div className="flex items-center justify-center mt-6">
+                    <button
+                        onClick={handleGoogle}
+                        className="flex items-center justify-center gap-3 w-full py-3 px-4 bg-white border border-gray-300 rounded-full shadow-sm hover:bg-gray-50 active:bg-gray-100 transition font-normal  text-gray-700"
+                    >
+                        <FcGoogle size={22} />
+                        <span className="text-sm">Continue with Google</span>
+                    </button>
+                </div>
+
 
                 {/* FOOTER */}
                 <div className="flex flex-col items-center justify-center mt-6 mb-6">
@@ -173,12 +207,6 @@ function SignUp() {
                         </Link>
                     </p>
 
-                    <div className="flex items-center justify-center mt-6">
-                        <button className="flex items-center gap-2 py-2 px-4 rounded-full bg-white shadow-md">
-                            <FcGoogle size={24} className="mr-2" />
-                            Continue with Google
-                        </button>
-                    </div>
                 </div>
 
             </div>

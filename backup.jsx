@@ -68,7 +68,7 @@ const SellerLogin = () => {
             );
             toast.success("Seller Login Successful!");
             setTimeout(() => {
-                navigate("/SellerDashbord");
+                navigate("/SellerDashboard");
             }, 1000);
         } catch (error) {
             toast.error("Login failed");
@@ -244,7 +244,7 @@ const SellerLogin = () => {
         toast.success("Seller Login Successful!");
 
         setTimeout(() => {
-            navigate("/SellerDashbord");
+            navigate("/SellerDashboard");
         }, 1000);
     };
 
